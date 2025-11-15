@@ -1,0 +1,313 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+#language-selector {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+}
+
+.lang-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    font-size: 14px;
+}
+
+.lang-btn:hover, .lang-btn.active {
+    background: rgba(76, 201, 240, 0.3);
+    border-color: #4cc9f0;
+    transform: translateY(-2px);
+}
+
+#game-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.screen {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+.screen.active {
+    display: flex;
+}
+
+#start-screen {
+    background: linear-gradient(45deg, #0c0c0c, #2d2d2d);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 30px;
+}
+
+#title-section {
+    text-align: center;
+}
+
+.game-title {
+    font-size: 4rem;
+    background: linear-gradient(45deg, #4cc9f0, #4361ee, #7209b7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+    text-shadow: 0 0 30px rgba(76, 201, 240, 0.5);
+}
+
+.game-subtitle {
+    font-size: 1.5rem;
+    color: #ccc;
+    margin-bottom: 40px;
+    font-weight: 300;
+}
+
+#start-btn {
+    background: linear-gradient(45deg, #4361ee, #4cc9f0);
+    border: none;
+    padding: 20px 50px;
+    font-size: 1.3rem;
+    color: white;
+    border-radius: 35px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 25px rgba(67, 97, 238, 0.4);
+    font-weight: bold;
+}
+
+#start-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 30px rgba(67, 97, 238, 0.6);
+}
+
+@keyframes glow {
+    0%, 100% { text-shadow: 0 0 20px rgba(76, 201, 240, 0.7); }
+    50% { text-shadow: 0 0 30px rgba(114, 9, 183, 0.9), 0 0 40px rgba(76, 201, 240, 0.5); }
+}
+
+.game-title {
+    animation: glow 3s ease-in-out infinite;
+}
+
+/* شاشة اللعبة الرئيسية */
+#computer-screen {
+    width: 95%;
+    height: 95%;
+    background: #2d2d2d;
+    border-radius: 15px;
+    border: 2px solid #444;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+#browser-window {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#browser-header {
+    background: #3a3a3a;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid #555;
+}
+
+.browser-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.browser-btn {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.browser-btn.close {
+    background: #ff5f57;
+    color: #000;
+}
+
+.browser-btn.minimize {
+    background: #ffbd2e;
+    color: #000;
+}
+
+.browser-btn.maximize {
+    background: #28ca42;
+    color: #000;
+}
+
+.browser-btn:hover {
+    transform: scale(1.1);
+}
+
+#address-bar {
+    background: #1a1a1a;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: #888;
+    flex: 1;
+    font-family: monospace;
+}
+
+#game-content {
+    flex: 1;
+    background: #1a1a1a;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+#dialogue-container {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#narrator-text {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    color: #4cc9f0;
+    text-align: center;
+}
+
+.typing-text {
+    border-right: 2px solid #4cc9f0;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { border-color: #4cc9f0; }
+    51%, 100% { border-color: transparent; }
+}
+
+#interaction-area {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.puzzle-element {
+    background: rgba(76, 201, 240, 0.15);
+    border: 2px solid #4cc9f0;
+    border-radius: 12px;
+    padding: 20px 35px;
+    cursor: grab;
+    transition: all 0.3s ease;
+    user-select: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.puzzle-element:hover {
+    background: rgba(76, 201, 240, 0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(76, 201, 240, 0.3);
+}
+
+#dialogue-options {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.dialogue-option {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.dialogue-option:hover {
+    background: rgba(76, 201, 240, 0.2);
+    border-color: #4cc9f0;
+    transform: translateY(-2px);
+}
+
+@keyframes glitch {
+    0% { transform: translate(0) skew(0); }
+    20% { transform: translate(-3px, 2px) skew(2deg); }
+    40% { transform: translate(3px, -2px) skew(-2deg); }
+    60% { transform: translate(-2px, 3px) skew(1deg); }
+    80% { transform: translate(2px, -3px) skew(-1deg); }
+    100% { transform: translate(0) skew(0); }
+}
+
+.glitch {
+    animation: glitch 0.3s infinite;
+}
+
+/* التكيف مع الجوال */
+@media (max-width: 768px) {
+    .game-title { font-size: 2.8rem; }
+    .game-subtitle { font-size: 1.2rem; }
+    #start-btn { padding: 18px 40px; font-size: 1.2rem; }
+    #language-selector { top: 15px; left: 15px; }
+    .lang-btn { padding: 8px 16px; font-size: 12px; }
+    #computer-screen { width: 98%; height: 98%; }
+    #game-content { padding: 20px; }
+    #dialogue-container { padding: 20px; min-height: 120px; }
+    #narrator-text { font-size: 1.1rem; }
+    .puzzle-element { padding: 15px 25px; font-size: 1rem; }
+    .dialogue-option { padding: 12px 25px; font-size: 1rem; }
+}
+
+/* تأثيرات إضافية */
+.mute-btn:hover {
+    background: rgba(76, 201, 240, 0.3) !important;
+    transform: scale(1.1);
+}
+
+.puzzle-solved {
+    background: rgba(29, 209, 161, 0.2) !important;
+    border-color: #1dd1a1 !important;
+}
