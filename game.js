@@ -1,6 +1,7 @@
-// النظام الرئيسي للعبة - النسخة المبسطة
+// النظام الرئيسي للعبة - مع تحميل فوري
 class LostTapeGame {
     constructor() {
+        console.log("🎮 بدء تحميل اللعبة...");
         this.story = new GameStory();
         this.puzzles = new PuzzleSystem();
         this.audio = new AudioSystem();
@@ -9,29 +10,43 @@ class LostTapeGame {
     }
 
     init() {
+        console.log("✅ اللعبة محملة بنجاح!");
         this.setupEventListeners();
-        console.log("🎮 لعبة الشريط المفقود - جاهزة!");
+        
+        // تحميل فوري عند بدء الصفحة
+        if (document.readyState === 'complete') {
+            this.initializeGame();
+        } else {
+            document.addEventListener('DOMContentLoaded', () => {
+                this.initializeGame();
+            });
+        }
     }
 
-    setupEventListeners() {
-        document.addEventListener('DOMContentLoaded', () => {
-            const startBtn = document.getElementById('start-btn');
-            if (startBtn) {
-                startBtn.addEventListener('click', () => {
-                    this.audio.playClickSound();
-                    this.startGame();
-                });
-            }
-
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    this.audio.playClickSound();
-                    this.switchLanguage(e.target.dataset.lang);
-                });
+    initializeGame() {
+        console.log("🚀 تهيئة اللعبة...");
+        const startBtn = document.getElementById('start-btn');
+        if (startBtn) {
+            console.log("✅ زر البدء موجود");
+            startBtn.addEventListener('click', () => {
+                console.log("🎯 تم النقر على زر البدء");
+                this.audio.playClickSound();
+                this.startGame();
             });
+        } else {
+            console.log("❌ زر البدء غير موجود!");
+        }
 
-            this.createMuteButton();
+        // أزرار اللغة
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.audio.playClickSound();
+                this.switchLanguage(e.target.dataset.lang);
+            });
         });
+
+        this.createMuteButton();
+        console.log("🎮 اللعبة جاهزة تماماً!");
     }
 
     createMuteButton() {
@@ -50,8 +65,15 @@ class LostTapeGame {
     }
 
     startGame() {
+        console.log("🎬 بدء اللعبة...");
         const startScreen = document.getElementById('start-screen');
+        if (!startScreen) {
+            console.log("❌ شاشة البدء غير موجودة!");
+            return;
+        }
+        
         startScreen.style.opacity = '0';
+        startScreen.style.transform = 'scale(0.9)';
         
         setTimeout(() => {
             startScreen.classList.remove('active');
@@ -60,7 +82,13 @@ class LostTapeGame {
     }
 
     showMainGame() {
+        console.log("🖥️ عرض الشاشة الرئيسية...");
         const gameContainer = document.getElementById('game-container');
+        if (!gameContainer) {
+            console.log("❌ حاوية اللعبة غير موجودة!");
+            return;
+        }
+        
         const currentChapter = this.story.getChapter(this.story.currentChapter);
         
         gameContainer.innerHTML = `
@@ -105,27 +133,46 @@ class LostTapeGame {
 
         this.setupGameEvents();
         this.narrator.typeText(currentChapter.dialogues.start);
+        console.log("✅ الشاشة الرئيسية معروضة بنجاح!");
     }
 
     setupGameEvents() {
+        console.log("🎯 إعداد أحداث اللعبة...");
+        
+        // زر الإغلاق
         const closeBtn = document.getElementById('close-btn');
         if (closeBtn) {
             closeBtn.addEventListener('click', () => {
+                console.log("🖱️ تم النقر على زر الإغلاق");
                 this.handleCloseButton();
             });
+        } else {
+            console.log("❌ زر الإغلاق غير موجود!");
         }
 
+        // السحب والإفلات
         const dragElement = document.getElementById('drag-puzzle');
         if (dragElement) {
             this.setupDragAndDrop(dragElement);
+        } else {
+            console.log("❌ عنصر السحب غير موجود!");
         }
 
-        document.querySelectorAll('.dialogue-option').forEach(option => {
-            option.addEventListener('click', (e) => {
-                this.audio.playClickSound();
-                this.handleDialogueChoice(e.target.dataset.response);
+        // خيارات الحوار
+        const dialogueOptions = document.querySelectorAll('.dialogue-option');
+        if (dialogueOptions.length > 0) {
+            dialogueOptions.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    console.log("💬 تم اختيار خيار الحوار: " + e.target.dataset.response);
+                    this.audio.playClickSound();
+                    this.handleDialogueChoice(e.target.dataset.response);
+                });
             });
-        });
+        } else {
+            console.log("❌ خيارات الحوار غير موجودة!");
+        }
+
+        console.log("✅ أحداث اللعبة جاهزة!");
     }
 
     handleCloseButton() {
@@ -146,6 +193,7 @@ class LostTapeGame {
         element.addEventListener('mousedown', (e) => {
             isDragging = true;
             element.style.cursor = 'grabbing';
+            console.log("🎮 بدء سحب العنصر");
         });
 
         document.addEventListener('mousemove', (e) => {
@@ -159,12 +207,35 @@ class LostTapeGame {
                 const rect = element.getBoundingClientRect();
                 if (rect.x >= targetZone.x && rect.x <= targetZone.x + targetZone.width &&
                     rect.y >= targetZone.y && rect.y <= targetZone.y + targetZone.height) {
+                    console.log("🎯 العنصر وصل للهدف!");
                     this.puzzles.solvePuzzle(this, 2, element, rect.x, rect.y);
                 }
             }
         });
 
         document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                element.style.cursor = 'grab';
+                console.log("🖐️ تم تحرير العنصر");
+            }
+        });
+
+        // للشاشات التي تعمل باللمس
+        element.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            element.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging && e.touches.length > 0) {
+                element.style.position = 'absolute';
+                element.style.left = (e.touches[0].clientX - 60) + 'px';
+                element.style.top = (e.touches[0].clientY - 30) + 'px';
+            }
+        });
+
+        document.addEventListener('touchend', () => {
             if (isDragging) {
                 isDragging = false;
                 element.style.cursor = 'grab';
@@ -187,7 +258,7 @@ class LostTapeGame {
             btn.classList.remove('active');
         });
         event.target.classList.add('active');
-        console.log("اللغة: " + lang);
+        console.log("🌐 تم التبديل إلى اللغة: " + lang);
     }
 }
 
@@ -198,7 +269,10 @@ class Narrator {
 
     typeText(text, speed = 40) {
         const textElement = document.getElementById('narrator-text');
-        if (!textElement) return;
+        if (!textElement) {
+            console.log("❌ عنصر النص غير موجود!");
+            return;
+        }
 
         textElement.innerHTML = '<span class="typing-text"></span>';
         const typingElement = textElement.querySelector('.typing-text');
@@ -211,11 +285,12 @@ class Narrator {
                 i++;
             } else {
                 clearInterval(typing);
+                console.log("✅ اكتملت الكتابة: " + text);
             }
         }, speed);
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    window.game = new LostTapeGame();
-});
+// بدء اللعبة فوراً
+console.log("🚀 بدء تحميل لعبة الشريط المفقود...");
+window.game = new LostTapeGame();
